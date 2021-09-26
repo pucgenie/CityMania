@@ -1,5 +1,5 @@
 CityMania! An open source city builder.
-Currenly Citymania is in prototype phase. It is buggy and as is.
+Currenly Citymania is in prototype phase. It is buggy and as-is.
 If it deletes your root partition it is not my fault.
 
 Forums: http://sc4devotion.com/forums/index.php?board=365.0
@@ -13,11 +13,11 @@ If you want to run from source
 
 INSTALL
 Citymania requires:
-Python 2.6 (Comes with panda3d sdk for you windows users)
-Panda3d SDK: http://www.panda3d.org/download.php?sdk
-PyYAML: http://pyyaml.org/wiki/PyYAML
-Google protocol buffer: http://code.google.com/p/protobuf/
-PIL: http://www.pythonware.com/products/pil/
+Python 3.7+ (Comes with panda3d sdk for you windows users) (old code runs on Python 2.6)
+Panda3d SDK: http://www.panda3d.org/
+PyYAML: pip3 install pyyaml
+Google protocol buffer: https://github.com/protocolbuffers/protobuf
+Pillow: https://pillow.readthedocs.io/en/stable/installation.html
 
 RUNNING
 The server and client are seperate applications. Best to run from command line.
@@ -25,10 +25,10 @@ Windows users: Make sure panda's ppython is in the system patha nd replace all p
 
 Server must be run first. Change dir to CityMania/server and run 
 
-python server.py
+python3 server.py
 
 In another command prompt change dir to CityMania/client and run
-python main.py
+python3 main.py
 
 Click multiplayer. Change the hostname to 127.0.0.1 and click connect.
 
