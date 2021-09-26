@@ -31,7 +31,8 @@ class FileSystem(engine.Entity):
             from win32com.shell import shell
             df = shell.SHGetDesktopFolder()
             pidl = df.ParseDisplayName(0, None,"::{450d8fba-ad25-11d0-98a8-0800361b1103}")[1]
-            self.home = shell.SHGetPathFromIDList(pidl)
+            # pucgenie: Fail if it uses some special encoding. LPSTR should be UTF-16, tough...
+            self.home = shell.SHGetPathFromIDListW(pidl)
         else:
             self.home = os.path.expanduser("~")
         if "CityMania" not in os.listdir(self.home):

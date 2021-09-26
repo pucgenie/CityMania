@@ -168,7 +168,7 @@ class CommandProcessor(engine.Entity):
 
 
 # We initialize the CityMania engine
-import __builtin__
+#import builtins
 #__builtin__.messenger = engine.EventManager()
 commandProcessor = CommandProcessor()
 
