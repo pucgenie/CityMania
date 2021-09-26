@@ -5,6 +5,9 @@ Contains message system, task manager, and the like
 """
 import time
 
+import logging
+logger = logging.getLogger('server')
+
 class EventManager(object):
     def __init__ (self):
         """
@@ -53,13 +56,13 @@ class EventManager(object):
                 self.step()
                 #print "End tick"
             except KeyboardInterrupt:
-                print "Interupt!"
+                logger.info("Interupt!")
                 messenger.send("exit")
                 self.stop()
                 
     def stop(self):
         self.running = False
-        print "Stopping"
+        logger.debug("Stopping")
         
     def step(self):
         self.post()
@@ -90,9 +93,9 @@ class EventManager(object):
                     #print "method:", method
                     method(*extraArgs)
                     
-import __builtin__
+import builtins
 # Messenger is the event communication system
-__builtin__.messenger = EventManager()
+builtins.messenger = EventManager()
 
 class Entity(object):
     """

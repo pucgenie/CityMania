@@ -16,6 +16,9 @@ import vfs
 from PagedGeoMipTerrain import PagedGeoMipTerrain
 picker = gui.getPicker()
 
+import logging
+logger = logging.getLogger('client')
+
 class Lights:
     def __init__(self, lightsOn=True,showLights=False):        
         #Initialize bg colour
@@ -68,17 +71,17 @@ class TerrainManager(DirectObject.DirectObject):
     
     def lclick(self):
         cell = picker.getMouseCell()
-        print "Cell:", cell
+        logger.info(f"Cell: {cell}")
         blockCoords = self.terrain.getBlockFromPos(cell[0], cell[1])
         block = self.terrain.getBlockNodePath(blockCoords[0], blockCoords[1])
-        print "Block coords:", blockCoords
-        print "NodePath:", block
-        print "Elevation:", self.terrain.getElevation(cell[0], cell[1])
+        logger.debug(f"""Block coords: {blockCoords}
+        NodePath: {block}
+        Elevation: {self.terrain.getElevation(cell[0], cell[1])}""")
         if not self.view:
             messenger.send("clickForCity", [cell])
     
     def switchWater(self):
-        print "Switch Water"
+        logger.debug("Switch Water")
         self.waterType += 1
         if self.waterType > 2:
             self.waterType = 0
@@ -142,7 +145,7 @@ class TerrainManager(DirectObject.DirectObject):
         self.setSurfaceTextures()
         self.generateWater(2)
         taskMgr.add(self.updateTerrain, "updateTerrain")
-        print "Done with terrain generation"
+        logger.debug("Done with terrain generation")
         messenger.send("finishedTerrainGen", [[self.xsize, self.ysize]])
         self.terrain.getRoot().analyze()
         self.accept("h", self.switchWater)
@@ -161,7 +164,7 @@ class TerrainManager(DirectObject.DirectObject):
         
         self.setSurfaceTextures()
         self.generateWater(2)
-        print "Done with terrain regeneration"
+        logger.debug("Done with terrain regeneration")
         messenger.send("finishedTerrainGen", [[self.xsize, self.ysize]])
     
     def generateWaterMap(self):
@@ -169,7 +172,7 @@ class TerrainManager(DirectObject.DirectObject):
         getXSize returns pixels length starting with 1, subtract 1 for obvious reasons
         We also slip in checking for the water card size, which should only change when the color map does
         '''
-        print "GenerateWaterMap"
+        logger.debug("GenerateWaterMap")
         self.waterXMin, self.waterXMax, self.waterYMin, self.waterYMax = -1,0,-1,0
         for x in range(0, self.heightmap.getXSize()-1):
             for y in range(0, self.heightmap.getYSize()-1):
@@ -232,10 +235,10 @@ class TerrainManager(DirectObject.DirectObject):
                 n += 1
             xavg = xsum/n
             yavg = ysum/n
-            print "Elevation:", self.terrain.getElevation(xavg, yavg)
+            logger.debug(f"Elevation: {self.terrain.getElevation(xavg, yavg)}")
             z = self.terrain.getElevation(xavg, yavg)*100
             citylabels[ident]["position"] = (xavg, yavg, z+15)
-            print "Citylabels:", citylabels
+            logger.debug(f"Citylabels: {citylabels}")
         messenger.send("updateCityLabels", [citylabels, self.terrain])
     
     def generateSurfaceTextures(self):
@@ -413,7 +416,7 @@ class TerrainManager(DirectObject.DirectObject):
         return task.cont 
     
     def generateWater(self, style):
-        print "Generate Water:", self.waterXMin, self.waterXMax, self.waterYMin,  self.waterYMax
+        logger.debug(f"Generate Water: {self.waterXMin} {self.waterXMax} {self.waterYMin} {self.waterYMax}")
         '''Generates water
         style 0: blue card
         style 1: reflective card

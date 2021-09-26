@@ -60,7 +60,7 @@ class ClientSocket(engine.Entity, threading.Thread):
                 logger.debug("Sending %s: %s" %(self.peer, data))
                 bytes = self.s.send(data)
                 self.sendCache = self.sendCache[bytes:]
-            except socket.timeout, message:
+            except socket.timeout as message:
                 logger.warning(message)
                 messenger.send('logout', [self.peer])
             except:
@@ -78,7 +78,7 @@ class ClientSocket(engine.Entity, threading.Thread):
         try:
             logger.debug("Sending %s: %s" %(self.peer, data))
             self.s.sendall(data.SerializeToString()+"[!]")
-        except socket.timeout, message:
+        except socket.timeout as message:
             logger.warning(message)
             messenger.send('logout', [self.peer])
         except:
@@ -132,7 +132,7 @@ class Network(engine.Entity, threading.Thread):
             t.daemon = True
             t.start()
         except:
-            print "Main socket error"
+            logger.error("Main socket error")
     
     def broadcast(self, data):
         """

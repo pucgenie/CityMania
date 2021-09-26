@@ -12,6 +12,9 @@ import common.protocol_pb2 as proto
 #import fs.osfs, fs.memoryfs, fs.utils
 import os, base64, shutil
 
+import logging
+logger = logging.getLogger('server.filesystem')
+
 class FileSystem(engine.Entity):
     """
     Temporary class until a suitable replacement can be found.
@@ -81,7 +84,7 @@ class FileSystem(engine.Entity):
                 try:
                     shutil.copyfile("Maps/"+mapName+"/heightmap.png", self.regionPath +"heightmap.png")
                 except:
-                    print "TODO: Add error message for missing map"
+                    logger.error("TODO: Add error message for missing map")
                     contrainer = proto.Container()
                     container.mapSelectError.message = "No such map name"
                     messenger.send("broadcastData", [container])
@@ -101,7 +104,7 @@ class FileSystemWIP(engine.Entity):
         self.userFS:    OS Filesystem representing the user ~ files
         TODO: How to handle save and loads?
         """
-        print "Loading files"
+        logger.debug("Loading files")
         self.fs = fs.memoryfs.MemoryFS()
         self.programFS = fs.osfs.OSFS(".")
         
@@ -136,4 +139,4 @@ class FileSystemWIP(engine.Entity):
         fs.utils.copydir((self.programFS, "Maps"), (self.fs, "Maps"))
         
         # Test if we copies ok
-        print self.fs.listdir("Maps/")
+        logger.debug(self.fs.listdir("Maps/"))

@@ -37,7 +37,14 @@ from direct.stdpy.file import *
 #import python modules
 import sys, subprocess, math
 sys.path.append("../..")
-#import logging
+import logging
+logger = logging.getLogger('client')
+logger.setLevel(logging.INFO)
+#logger.setLevel(logging.DEBUG)
+stream = logging.StreamHandler()
+formatter = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+stream.setFormatter(formatter)
+logger.addHandler(stream)
 
 import gui
 import network

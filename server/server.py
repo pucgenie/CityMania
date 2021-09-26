@@ -22,6 +22,10 @@ PORT = 52003
 
 # TODO: Seperate files dude!
 
+# Set up logging
+import logging
+logger = logging.getLogger('server')
+
 class GameState(engine.Entity):
     """
     Defines the game state (running, loaded, saving?).
@@ -45,7 +49,7 @@ class GameState(engine.Entity):
     
     def setServerState(self, state):
         self.serverState = state
-        print "Server set to state", state
+        logger.info(f"Server set to state {state}")
     
     def fullPause(self, var1=None):
         # If serverstate is 0 then can't change it to 1!
@@ -104,7 +108,7 @@ class CommandProcessor(engine.Entity):
             self.login(peer, container.login)
         # If the player is not logged in we will not process any other message
         if peer not in users.peers:
-            print "Unauthorized message from", peer, ". Skipping."
+            logger.warn(f"Unauthorized message from {peer}. Skipping.")
             return
         if container.HasField("chat"):
             messenger.send("onChat", [peer, container.chat])
@@ -168,9 +172,6 @@ import __builtin__
 #__builtin__.messenger = engine.EventManager()
 commandProcessor = CommandProcessor()
 
-# Set up logging
-import logging
-logger = logging.getLogger('server')
 logger.setLevel(logging.INFO)
 #logger.setLevel(logging.DEBUG)
 stream = logging.StreamHandler()
@@ -182,12 +183,12 @@ logger.info('Logging stream handler added.')
 def main():
     vfs = filesystem.FileSystem()
     # Finish setting up logger
-    logPath = vfs.logs + 'server.log'
-    logFile = logging.FileHandler(logPath)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    logFile.setFormatter(formatter)
-    logger.addHandler(logFile)
-    logger.info("Logging file handler added. Logging to %s" % logPath)
+    #logPath = vfs.logs + 'server.log'
+    #logFile = logging.FileHandler(logPath)
+    #formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    #logFile.setFormatter(formatter)
+    #logger.addHandler(logFile)
+    #logger.info(f"Logging file handler added. Logging to {logPath}")
     
     network = Network(HOST, PORT)
     chatServer = chat.ChatServer()
@@ -196,7 +197,7 @@ def main():
     
     try:
         messenger.start()
-    except Exception, e:
+    except Exception as e:
         logger.exception(e)
 
 if __name__ == "__main__":

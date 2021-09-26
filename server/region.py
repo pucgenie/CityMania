@@ -5,9 +5,9 @@ Class for server region, esentially the master model
 """
 import engine
 import city
-import Image
+from PIL import Image
 import base64, math
-import StringIO
+from io import StringIO
 import users
 import sys
 sys.path.append("..")
@@ -157,7 +157,7 @@ class Region(engine.Entity):
         container = proto.Container()
         container.newCityResponse.type = 1
         #messenger.send("sendData", [peer, container])
-        print info.name, "founded with", newcity.funds
+        logger.info(f"{info.name} founded with {newcity.funds}")
         
         #container = proto.Container()
         container.newCity.id = cityid

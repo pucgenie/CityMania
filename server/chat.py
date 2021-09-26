@@ -61,9 +61,9 @@ class ChatServer(engine.Entity):
         """
         Processes irc (RFC 1459) messages
         """
-        print "Pre processed message:", message
+        logger.debug(f"Pre processed message: {message}")
         prefix, command, args = self.parsemsg(message)
-        print "IRC:", prefix, command, args
+        logger.debug(f"IRC: {prefix} {command} {args}")
         
         # These are all the commands we are going to impliment at the moment
         
